@@ -1,7 +1,7 @@
 % extract daily frontal result to MAT file (temporary way, need to dumping in NetCDF),
 % plot SST front figure 
-% data: 11-year OSTIA daily SST data from 2007-2017
-% data path: server197: /work/person/rensh//Data/OSTIA/
+% data: 11-year ROMS daily average SST data from 2007-2017
+% data path: /work/person/rensh/Data/scs50_hindcast_nudg_new/
 close all
 clear all
 clc
@@ -9,16 +9,16 @@ clc
 platform = 'server197';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
-    data_path = 'D:\lomf\frontal_detect\Data\ostia\';
+    data_path = 'E:\DATA\Model\ROMS\scs_new\';
     toolbox_path = 'D:\matlab_function\';
  elseif strcmp(platform,'PC_office')
     basedir = 'D:\lomf\frontal_detect\';
-    data_path = 'E:\DATA\obs\OSTIA\';
+    data_path = 'S:\DATA\Model\ROMS\scs_new\';
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform,'server197')
     root_path = '/work/person/rensh/';
     basedir = [root_path,'/front_detect/'];
-    data_path = [root_path,'/Data/OSTIA/'];
+    data_path = [root_path,'/Data/scs50_hindcast_nudg_new/'];
     toolbox_path = [root_path,'/matlab_function/'];
 end
 % add path of toolbox we use
@@ -48,11 +48,15 @@ switch domain
         lon_w=99; lon_e=144;
 end
 
-fig_path = [basedir,'./Fig/ostia/daily/',domain_name,'/'];mkdir(fig_path);
-result_path = [basedir,'./Result/ostia/daily/',domain_name,'/'];mkdir(result_path)
+grdfn = [data_path,'scs50_grd.nc'];
+fig_path = [basedir,'./Fig/roms/',domain_name,'/'];mkdir(fig_path);
+result_path = [basedir,'./Result/roms/',domain_name,'/'];mkdir(result_path)
+
+
+% front parameter setup
 % preprocess parameter
-datatype='ostia';
-fntype='daily';
+datatype='roms';
+fntype='avg';
 depth = 1;
 skip=1;
 smooth_type = 'gaussian';
@@ -60,7 +64,7 @@ sigma = 2;
 N = 2;
 fill_value = 0;
 % detect parameter
-flen_crit=0e3;
+flen_crit=50e3;
 thresh_in = [];
 % postprocess parameter
 logic_morph = 0;
@@ -69,19 +73,19 @@ yy1 = 2007;
 yy2 = 2017;
 
 
+% daily loop
 for iy = yy1:yy2
     for im = 1:12
-        for id = 1:31
+        for id = 1:31            
+            fn = [data_path,'scs50_avg_',num2str(iy),'.nc'];
             day_string = [num2str(iy),num2str(im,'%2.2d'),num2str(id,'%2.2d')]
-            ostia_path = [data_path,num2str(iy),'/'];
-            fn = [ostia_path,day_string,'-UKMO-L4HRfnd-GLOB-v01-fv02-OSTIA.nc'];
             fig_fn = [fig_path,'sst_front_',day_string,'.png'];
             result_fn = [result_path,'detected_front_',day_string,'.mat'];
-            if ~exist(fn) || exist(result_fn)
+            [temp,grd] = roms_preprocess(fn,'avg',grdfn,depth,lon_w,lon_e,lat_s,lat_n,fill_value,skip,day_string);
+            if isempty(temp) ||  exist(result_fn)
                 continue
             end
-            [temp,grd] = ostia_preprocess(fn,lon_w,lon_e,lat_s,lat_n);
-            [temp_zl] = variable_preprocess(temp,smooth_type,fill_value);  
+            [temp_zl]=variable_preprocess(temp,smooth_type,fill_value);
             [tfrontline,bw_final,thresh_out,tgrad,tangle] = front_line(temp_zl,thresh_in,grd,flen_crit,logic_morph);
             fnum = length(tfrontline);
             [info_area,tfrontarea] = front_area(tfrontline,tgrad,tangle,grd,thresh_out);
