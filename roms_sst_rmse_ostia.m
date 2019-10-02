@@ -62,8 +62,8 @@ fill_value = 0;
 yy1 = 2007;
 yy2 = 2017;
 %
-fig_path = [basedir,'./Fig/roms/',domain_name,'/'];mkdir(fig_path);
-result_path = [basedir,'./Result/roms/',domain_name,'/'];mkdir(result_path)
+fig_path = [basedir,'./Fig/roms/',domain_name,'/climatology/'];mkdir(fig_path);
+result_path = [basedir,'./Result/roms/',domain_name,'/climatology/'];mkdir(result_path)
 
 % get OSTIA grd from test filename
 iy = 2017; im = 2; id = 6;
