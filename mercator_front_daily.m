@@ -50,8 +50,8 @@ switch domain
         lon_w=99; lon_e=144;
 end
 
-fig_path = [basedir,'./Fig/mercator/daily/',domain_name,'/'];mkdir(fig_path);
-result_path = [basedir,'./Result/mercator/daily/',domain_name,'/'];mkdir(result_path)
+fig_path = [basedir,'./Fig/mercator/',domain_name,'/daily/'];mkdir(fig_path);
+result_path = [basedir,'./Result/mercator/',domain_name,'/daily/'];mkdir(result_path)
 % preprocess parameter
 datatype = 'mercator';
 fntype = 'daily';
@@ -68,11 +68,15 @@ thresh_in = [];
 % postprocess parameter
 logic_morph = 0;
 
-for iy = 2018:2018
+%
+yy1 = 2018;
+yy2 = 2018;
+
+for iy = yy1:yy2
     for im = 1:12
         
         for id = 1:31
-            day_string = [num2str(iy),num2str(im,'%2.2d'),num2str(id,'%2.2d')]
+            day_string = [num2str(iy),num2str(im,'%2.2d'),num2str(id,'%2.2d')];
             filestruct = dir([data_path,'/ext-PSY4V3R1_1dAV_',day_string,'*gridT*.nc']);
             if isempty(filestruct)
                 continue
