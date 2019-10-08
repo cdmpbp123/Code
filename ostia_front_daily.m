@@ -49,7 +49,7 @@ switch domain
 end
 
 fig_path = [basedir,'./Fig/ostia/',domain_name,'/daily/'];mkdir(fig_path);
-result_path = [basedir,'./Result/ostia/',domain_name,'/daily'];mkdir(result_path)
+result_path = [basedir,'./Result/ostia/',domain_name,'/daily/'];mkdir(result_path)
 % preprocess parameter
 datatype='ostia';
 fntype='daily';
