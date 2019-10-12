@@ -58,7 +58,6 @@ fntype = 'daily';
 depth = 1;
 skip=1;
 smooth_type = 'gaussian';
-% smooth_type = 'no_smooth'; % 
 sigma = 2;
 N = 2;
 fill_value = 0;

@@ -55,7 +55,7 @@ end
 % preprocess parameter
 depth = 1;
 skip=1;
-smooth_type = 'no_smooth';
+smooth_type = 'gaussian';
 sigma = 2;
 N = 2;
 fill_value = 0;
@@ -68,13 +68,13 @@ HighFreq = 0.9;
 yy1 = 2018;
 yy2 = 2018;
 %
-daily_input_path = [basedir, './Result/mercator/',domain_name,'/daily']; 
+daily_input_path = [basedir, './Result/mercator/',domain_name,'/daily/']; 
 result_path = [basedir,'./Result/mercator/',domain_name,'/climatology/'];mkdir(result_path)
 result_fn = [result_path,'/mercator_front_monthly_climatology_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.nc'];
 fig_path = [basedir,'./Fig/mercator/',domain_name,'/climatology/'];mkdir(fig_path);
 if ~exist(result_fn)
     % get OSTIA grd from test filename
-    iy = 2017; im = 1; id = 1;
+    iy = yy1; im = 1; id = 1;
     day_string = [num2str(iy),num2str(im,'%2.2d'),num2str(id,'%2.2d')];
     test_fn = [daily_input_path,'/',num2str(iy), '/detected_front_', day_string, '.mat'];
     if ~exist(test_fn)
@@ -318,4 +318,5 @@ set(gca,'YLim',[60 200])
 set(gca,'XTickLabel',xx)
 export_fig([fig_path,'front_number_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
 
+close all
 
