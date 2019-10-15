@@ -70,7 +70,7 @@ yy2 = 2018;
 result_path = [basedir, './Result/mercator/', domain_name, '/climatology/'];
 % input file
 clim_result_fn = [result_path, '/mercator_front_monthly_climatology_', smooth_type, '_', num2str(yy1), 'to', num2str(yy2), '.nc'];
-fig_path = [basedir, './Fig/mercator/climatology/', domain_name, '/']; mkdir(fig_path);
+fig_path = [basedir, './Fig/mercator/', domain_name, '/climatology/']; mkdir(fig_path);
 result_fn = [result_path, '/mercator_front_frequency_map_', smooth_type, '_', num2str(yy1), 'to', num2str(yy2), '.nc'];
 %
 % concat daily data
