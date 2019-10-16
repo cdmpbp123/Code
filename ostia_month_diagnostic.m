@@ -160,7 +160,8 @@ if ~exist(result_fn)
         clear iday temp_sum tgrad_sum
         clear frontLength_sum frontStrength_sum frontWidth_sum frontArea_sum frontNumber
         % auto-threshold
-        thresh_fig_name = [fig_path,'/ostia_tgrad_threshold_month_',num2str(im,'%2.2d'),'_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.jpg'];
+        mkdir([fig_path,'monthly_thresh']);
+        thresh_fig_name = [fig_path,'/monthly_thresh/ostia_tgrad_threshold_month_',num2str(im,'%2.2d'),'_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.jpg'];
         [LowThresh, HighThresh] = auto_thresh_histogram(tgrad_1d, LowFreq, HighFreq, thresh_fig_name);
         close all
         low_thresh_month(im) = LowThresh;
@@ -230,6 +231,7 @@ tgrad_min = 0.01;   tgrad_max = 0.1;
 % set position for text
 X0 = lon_w + 0.05*(lon_e - lon_w);
 Y0 = lat_s +0.9*(lat_n - lat_s);
+mkdir([fig_path,'monthly_front'])
 for im=1:12
     T = squeeze(temp_mean(:,:,im));
     tgrad = squeeze(tgrad_mean(:,:,im));
@@ -249,7 +251,7 @@ for im=1:12
     colorbar
     colormap(jet);
     caxis([tmin tmax])
-    fname = [fig_path,'/monthly_temp_',num2str(im,'%2.2d'),'_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'];
+    fname = [fig_path,'/monthly_front/monthly_temp_',num2str(im,'%2.2d'),'_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'];
     export_fig(fname,'-png','-r200');
     close all
     
@@ -267,7 +269,7 @@ for im=1:12
     caxis([tgrad_min tgrad_max])
     m_text(X0,Y0,mm,'FontSize',14)
     title(['climatology SST gradient in month ',num2str(im,'%2.2d'),' Unit: \circC/km'])
-    fname = [fig_path,'/monthly_tgrad_',num2str(im,'%2.2d'),'_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'];
+    fname = [fig_path,'/monthly_front/monthly_tgrad_',num2str(im,'%2.2d'),'_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'];
     export_fig(fname,'-png','-r200');
     close all
 end
@@ -276,50 +278,51 @@ end
 month_string = {'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'};
 xx = cellstr(month_string);
 
+diagnostic_fig_path = [fig_path,'/monthly_diagnostic/'];mkdir(diagnostic_fig_path)
 % bar image for front length
 figure
 bar(frontLength_mean*1e-3,0.5)
 title('climatology front length diagnostic for OSTIA')
 ylabel('km')
-set(gca,'YLim',[80 200])
+% set(gca,'YLim',[80 200])
 set(gca,'XTickLabel',xx)
-export_fig([fig_path,'front_length_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
+export_fig([diagnostic_fig_path,'front_length_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
 
 % bar image for front length
 figure
 bar(frontStrength_mean,0.5)
 title('climatology front strength diagnostic for OSTIA')
 ylabel('\circC/km')
-set(gca,'YLim',[0.01 0.05])
+% set(gca,'YLim',[0.01 0.05])
 set(gca,'XTickLabel',xx)
-export_fig([fig_path,'front_strength_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
+export_fig([diagnostic_fig_path,'front_strength_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
 
 % bar image for front width
 figure
 bar(frontWidth_mean*1e-3,0.5)
 title('climatology front width diagnostic for OSTIA')
 ylabel('km')
-set(gca,'YLim',[30 80])
+% set(gca,'YLim',[30 80])
 set(gca,'XTickLabel',xx)
-export_fig([fig_path,'front_width_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
+export_fig([diagnostic_fig_path,'front_width_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
 
 % bar image for front area
 figure
 bar(frontArea_mean*1e-6,0.5)
 title('climatology front area diagnostic for OSTIA')
 ylabel('km2')
-set(gca,'YLim',[3000 12000])
+% set(gca,'YLim',[3000 12000])
 set(gca,'XTickLabel',xx)
-export_fig([fig_path,'front_area_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
+export_fig([diagnostic_fig_path,'front_area_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
 
 % bar image for front number
 figure
 bar(frontNumber_mean,0.5)
 title('climatology front number diagnostic for OSTIA')
 ylabel('#')
-set(gca,'YLim',[60 200])
+% set(gca,'YLim',[60 200])
 set(gca,'XTickLabel',xx)
-export_fig([fig_path,'front_number_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
+export_fig([diagnostic_fig_path,'front_number_climatology_diagnostic_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.png'],'-png','-r200');
 
 
 

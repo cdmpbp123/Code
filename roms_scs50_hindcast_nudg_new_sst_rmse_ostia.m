@@ -1,12 +1,14 @@
 % SST rmse between ROMS and OSTIA
 % interpolate ROMS data to OSTIA grid
 % calculate  monthly temperature and output
+% ROMS expriment: scs50_hindcast_nudg_new
 % TBD: add mercator for intercomparison
 % all data interpolated to OBS grid 
 close all
 clear all
 clc
 %
+roms_exp_name = 'scs50_hindcast_nudg_new';
 platform = 'server197';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
@@ -22,7 +24,7 @@ elseif strcmp(platform,'server197')
     root_path = '/work/person/rensh/';
     basedir = [root_path,'/front_detect/'];
     ostia_path = [root_path,'/Data/OSTIA/'];
-    roms_path = [root_path,'/Data/scs50_hindcast_nudg_new/'];
+    roms_path = [root_path,'/Data/',roms_exp_name,'/'];
     toolbox_path = [root_path,'/matlab_function/'];
 end
 
@@ -66,7 +68,7 @@ fig_path = [basedir,'./Fig/roms/',domain_name,'/climatology/'];mkdir(fig_path);
 result_path = [basedir,'./Result/roms/',domain_name,'/climatology/'];mkdir(result_path)
 
 % get OSTIA grd from test filename
-iy = 2017; im = 2; id = 6;
+iy = 2017; im = 1; id = 1;
 day_string = [num2str(iy),num2str(im,'%2.2d'),num2str(id,'%2.2d')];
 ostia_data_path = [ostia_path,num2str(iy),'/'];
 ostia_test = [ostia_data_path,day_string,'-UKMO-L4HRfnd-GLOB-v01-fv02-OSTIA.nc'];
@@ -91,6 +93,7 @@ nt = 12;
 tempObs_mean = zeros(nx,ny,nt);
 tempMod_mean = zeros(nx,ny,nt);
 rmse_mean = zeros(nx,ny,nt);
+total_days_monthly = zeros(nt,1);
 %begin loop
 for im = 1:nt
     iday = 0;
@@ -138,10 +141,12 @@ for im = 1:nt
     tempObs_mean(:,:,im) = tempObs_sum / iday;
     tempMod_mean(:,:,im) = tempMod_sum / iday;
     rmse_mean(:,:,im) = sqrt(rmse_num / iday);
+    total_days_monthly(im) = iday;
     % clear iday tempObs_sum tempMod_sum rmse_num
 end
+save('sst_rmse_nudging.mat','tempObs_mean','tempMod_mean','rmse_mean','total_days_monthly')
 
-result_fn = [result_path,'/rmse_front_monthly_climatology_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.nc'];
+result_fn = [result_path,roms_exp_name,'_sst_rmse_climatology_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.nc'];
 % create variable with defined dimension
 nccreate(result_fn,'lon','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','classic')
 nccreate(result_fn,'lat','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','classic')
@@ -149,6 +154,7 @@ nccreate(result_fn,'mask','Dimensions',{'nx' nx 'ny' ny},'datatype','double','fo
 nccreate(result_fn,'temp_ostia','Dimensions',{'nx' nx 'ny' ny 'nt' nt},'datatype','double','format','classic')
 nccreate(result_fn,'temp_roms','Dimensions',{'nx' nx 'ny' ny 'nt' nt},'datatype','double','format','classic')
 nccreate(result_fn,'rmse','Dimensions',{'nx' nx 'ny' ny 'nt' nt},'datatype','double','format','classic')
+nccreate(result_fn,'total_days_monthly','Dimensions',{'nt' nt},'datatype','double','format','classic')
 % write variable into files
 ncwrite(result_fn,'lon',Olon)
 ncwrite(result_fn,'lat',Olat)
@@ -156,6 +162,7 @@ ncwrite(result_fn,'mask',maskOM)
 ncwrite(result_fn,'temp_ostia',tempObs_mean)
 ncwrite(result_fn,'temp_roms',tempMod_mean)
 ncwrite(result_fn,'rmse',rmse_mean)
+ncwrite(result_fn,'total_days_monthly',total_days_monthly)
 % write file global attribute 
 ncwriteatt(result_fn,'/','creation_date',datestr(now))
 ncwriteatt(result_fn,'/','platform',platform)
