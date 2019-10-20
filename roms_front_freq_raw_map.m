@@ -67,6 +67,7 @@ logic_morph = 0;
 yy1 = 2017;
 yy2 = 2017;
 
+fig_front_freq = 0;
 result_path = [basedir, './Result/roms/', domain_name, '/climatology/'];
 % input file
 clim_result_fn = [result_path, '/roms_front_monthly_climatology_', smooth_type, '_', num2str(yy1), 'to', num2str(yy2), '.nc'];
@@ -133,42 +134,42 @@ for im = 1:12
             
         end
     end
-    
-    frontarea_freq_month = squeeze(frontarea_freq_map(:,:,im));
-    % plot monthly frontarea frequency figure
-    figure('visible','off','color',[1 1 1])
-    m_proj('Miller','lat',[lat_s lat_n],'lon',[lon_w lon_e]);
-    P=m_pcolor(lon,lat,frontarea_freq_month);
-    set(P,'LineStyle','none');
-    shading interp
-    hold on
-    m_gshhs_i('patch', [.8 .8 .8], 'edgecolor', 'none');
-    m_grid('box','fancy','tickdir','in','linest','none','ytick',-10:5:40,'xtick',90:5:150);
-    caxis([0.3 1])
-    colorbar
-    title(['frontzone frequency map in month ',num2str(im,'%2.2d')])
-    export_fig([fig_path,'frontarea_freq_map_month_',num2str(im,'%2.2d')],'-png','-r200');
-    close all
+    if fig_front_freq 
+        frontarea_freq_month = squeeze(frontarea_freq_map(:,:,im));
+        % plot monthly frontarea frequency figure
+        figure('visible','off','color',[1 1 1])
+        m_proj('Miller','lat',[lat_s lat_n],'lon',[lon_w lon_e]);
+        P=m_pcolor(lon,lat,frontarea_freq_month);
+        set(P,'LineStyle','none');
+        shading interp
+        hold on
+        m_gshhs_i('patch', [.8 .8 .8], 'edgecolor', 'none');
+        m_grid('box','fancy','tickdir','in','linest','none','ytick',-10:5:40,'xtick',90:5:150);
+        caxis([0.3 1])
+        colorbar
+        title(['frontzone frequency map in month ',num2str(im,'%2.2d')])
+        export_fig([fig_path,'frontarea_freq_map_month_',num2str(im,'%2.2d')],'-png','-r200');
+        close all
 
-    frontline_freq_month = squeeze(frontline_freq_map(:,:,im));
-    % plot monthly frontarea frequency figure
-    figure('visible','off','color',[1 1 1])
-    m_proj('Miller','lat',[lat_s lat_n],'lon',[lon_w lon_e]);
-    P=m_pcolor(lon,lat,frontline_freq_month);
-    set(P,'LineStyle','none');
-    shading interp
-    hold on
-    m_gshhs_i('patch', [.8 .8 .8], 'edgecolor', 'none');
-    m_grid('box','fancy','tickdir','in','linest','none','ytick',-10:5:40,'xtick',90:5:150);
-    caxis([0.1 0.6])
-    colorbar
-    title(['frontline frequency map in month ',num2str(im,'%2.2d')])
-    export_fig([fig_path,'frontline_freq_map_month_',num2str(im,'%2.2d')],'-png','-r200');
-    close all
-    
+        frontline_freq_month = squeeze(frontline_freq_map(:,:,im));
+        % plot monthly frontarea frequency figure
+        figure('visible','off','color',[1 1 1])
+        m_proj('Miller','lat',[lat_s lat_n],'lon',[lon_w lon_e]);
+        P=m_pcolor(lon,lat,frontline_freq_month);
+        set(P,'LineStyle','none');
+        shading interp
+        hold on
+        m_gshhs_i('patch', [.8 .8 .8], 'edgecolor', 'none');
+        m_grid('box','fancy','tickdir','in','linest','none','ytick',-10:5:40,'xtick',90:5:150);
+        caxis([0.1 0.6])
+        colorbar
+        title(['frontline frequency map in month ',num2str(im,'%2.2d')])
+        export_fig([fig_path,'frontline_freq_map_month_',num2str(im,'%2.2d')],'-png','-r200');
+        close all
+    end
 end
 tt = toc;
-save('roms_front_freq_map.mat','frontarea_freq_map','frontline_freq_map')
+% save('roms_front_freq_map.mat','frontarea_freq_map','frontline_freq_map')
 if 1 == 1
     delete(result_fn)
     % create variable with defined dimension

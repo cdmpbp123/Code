@@ -11,14 +11,10 @@ if strcmp(platform, 'hanyh_laptop')
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform,'PC_office')
     basedir = 'D:\lomf\frontal_detect\';
-    ostia_path = 'S:\DATA\obs\OSTIA\';
-    roms_path = 'S:\DATA\Model\ROMS\scs_new\';
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform,'server197')
     root_path = '/work/person/rensh/';
     basedir = [root_path,'/front_detect/'];
-    ostia_path = [root_path,'/Data/OSTIA/'];
-    roms_path = [root_path,'/Data/OSTIA/'];
     toolbox_path = [root_path,'/matlab_function/'];
 elseif strcmp(platform,'mercator_PC')
     root_path = '/homelocal/sauvegarde/sren/';
