@@ -64,12 +64,13 @@ sigma = 2;
 N = 2;
 fill_value = 0;
 % detect parameter
-flen_crit=50e3;
+% flen_crit=50e3; % 20191002 experiment
+flen_crit=0e3; % 20191018 experiment
 thresh_in = [];
 % postprocess parameter
 logic_morph = 0;
 %
-yy1 = 2007;
+yy1 = 2017;
 yy2 = 2017;
 
 
@@ -81,12 +82,11 @@ for iy = yy1:yy2
         for id = 1:31            
             fn = [data_path,'scs50_avg_',num2str(iy),'.nc'];
             day_string = [num2str(iy),num2str(im,'%2.2d'),num2str(id,'%2.2d')]
-            result_fn = [year_result_path,'detected_front_',day_string,'.mat'];
-            [temp,grd] = roms_preprocess(fn,'avg',grdfn,depth,lon_w,lon_e,lat_s,lat_n,fill_value,skip,day_string);
-            %
-            if isempty(temp) ||  exist(result_fn)
+            [temp,grd] = roms_preprocess(fn,fntype,grdfn,depth,lon_w,lon_e,lat_s,lat_n,fill_value,skip,day_string);
+            if isempty(temp)
                 continue
             end
+            result_fn = [year_result_path,'detected_front_',day_string,'.mat'];
             [temp_zl]=variable_preprocess(temp,smooth_type,fill_value);
             [tfrontline,bw_final,thresh_out,tgrad,tangle] = front_line(temp_zl,thresh_in,grd,flen_crit,logic_morph);
             fnum = length(tfrontline);

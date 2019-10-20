@@ -1,5 +1,5 @@
 % calculate monthly temperature and auto-threshold,
-% then save output for OSTIA SST
+% then save output for ROMS SST
 close all
 clear all
 clc
