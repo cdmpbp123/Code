@@ -3,7 +3,8 @@ close all
 clear all
 clc
 %
-platform = 'hanyh_laptop';
+warning off
+platform = 'mercator_PC';
 
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
@@ -83,8 +84,10 @@ for iy = yy1:yy2
         for id = 1:31
             day_string = [num2str(iy), num2str(im, '%2.2d'), num2str(id, '%2.2d')]
             filestruct = dir([data_path, '/ext-PSY4V3R1_1dAV_', day_string, '*gridT*.nc']);
+            mat_fn = [year_mat_path, 'detected_front_', day_string, '.mat'];
+            nc_fn = [year_netcdf_path,'detected_front_',day_string,'.nc'];
 
-            if isempty(filestruct)
+            if isempty(filestruct) || exist(nc_fn) || exist(mat_fn)
                 continue
             end
 
@@ -96,13 +99,13 @@ for iy = yy1:yy2
             [tfrontarea,bw_area] = front_area(tfrontline, tgrad, tangle, grd, thresh_out);
             [front_parameter] = cal_front_parameter(tfrontline,tfrontarea,grd);
             % dump output
-            dump_front_stats('MAT', [year_mat_path, 'detected_front_', day_string, '.mat'], ...
+            dump_front_stats('MAT', mat_fn, ...
                 bw_line, bw_area, temp_zl, ...
                 grd, tfrontline, tfrontarea, front_parameter,...
                 thresh_out, skip, flen_crit, ...
                 datatype, smooth_type, fntype)
             % NetCDF output
-            dump_front_stats('netcdf', [year_netcdf_path,'detected_front_',day_string,'.nc'], ...
+            dump_front_stats('netcdf', nc_fn, ...
                 bw_line, bw_area, temp_zl, ...
                 grd, tfrontline, tfrontarea, front_parameter,...
                 thresh_out, skip, flen_crit, ...
