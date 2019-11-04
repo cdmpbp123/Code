@@ -3,7 +3,7 @@ close all
 clear all
 clc
 %
-platform = 'hanyh_laptop';
+platform = 'server197';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
     data_path = 'E:\DATA\Model\Mercator\Extraction_PSY4V3_SCS\';
@@ -51,7 +51,7 @@ switch domain
 end
 
 % preprocess parameter
-datatype = 'mercator';
+datatype = 'ostia';
 fntype = 'daily';
 depth = 1;
 skip = 1;
@@ -103,6 +103,7 @@ for iy = yy1:yy2
     nccreate(result_fn,'lat','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','classic')
     nccreate(result_fn,'mask','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','classic')
     nccreate(result_fn,'total_counter_bin','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','classic')
+    nccreate(result_fn, 'datetime', 'Dimensions', {'nt' ndays}, 'datatype', 'double', 'format', 'classic')
     nccreate(result_fn, 'frontarea_counter_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'classic')
     nccreate(result_fn, 'frontline_counter_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'classic')
     nccreate(result_fn, 'frontarea_ratio_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'classic')
@@ -112,6 +113,7 @@ for iy = yy1:yy2
     ncwrite(result_fn, 'lat', lat_bin)
     ncwrite(result_fn, 'mask', mask_bin)
     ncwrite(result_fn, 'total_counter_bin', total_counter_bin)
+    ncwrite(result_fn, 'datetime', datetime)
     ncwrite(result_fn, 'frontarea_counter_bin', frontarea_counter_bin)
     ncwrite(result_fn, 'frontline_counter_bin', frontline_counter_bin)
     ncwrite(result_fn, 'frontarea_ratio_bin', frontarea_ratio_bin)

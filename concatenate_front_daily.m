@@ -3,7 +3,7 @@ close all
 clear all
 clc
 %
-platform = 'hanyh_laptop';
+platform = 'server197';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
     data_path = 'E:\DATA\Model\Mercator\Extraction_PSY4V3_SCS\';
@@ -50,7 +50,7 @@ switch domain
         lon_w = 99; lon_e = 144;
 end
 % preprocess parameter
-datatype = 'ostia';
+datatype = 'roms';
 fntype = 'daily';
 depth = 1;
 skip = 1;
@@ -73,7 +73,7 @@ mask = ncread(grd_fn,'mask');
 [nx, ny] = size(mask);
 nt = 12;
 
-iday = 0;
+% iday = 0;
 
 for iy = yy1:yy2
     result_fn = [daily_path, '/concatenate_front_daily_',num2str(iy),'.nc'];
@@ -90,10 +90,11 @@ for iy = yy1:yy2
     high_thresh_daily = zeros(nt,1);
     length_thresh_daily = zeros(nt,1);
     front_num_daily = zeros(nt,1);
+    iday = 0;
     for im = 1:12
         
         for id = 1:31
-            day_string = [num2str(iy), num2str(im, '%2.2d'), num2str(id, '%2.2d')];
+            day_string = [num2str(iy), num2str(im, '%2.2d'), num2str(id, '%2.2d')]
             fn = [daily_path,'/',num2str(iy), '/mat/detected_front_', day_string, '.mat'];
             
             if ~exist(fn)
