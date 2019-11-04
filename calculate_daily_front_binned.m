@@ -82,6 +82,10 @@ bin_resolution = 0.5; % unit: degree
 [nx_bin,ny_bin] = size(lon_bin);
 for iy = yy1:yy2
     fn = [daily_path, '/concatenate_front_daily_',num2str(iy),'.nc'];
+    result_fn = [daily_path, '/concatenate_front_daily_binned_',num2str(bin_resolution),'degree_',num2str(iy),'.nc'];
+    if -exist(fn) || exist(result_fn)
+        continue
+    end
     datetime = ncread(fn,'datetime');
     ndays = length(datetime);
     frontarea_counter_bin = zeros(nx_bin,ny_bin,ndays);
@@ -96,18 +100,16 @@ for iy = yy1:yy2
     frontarea_ratio_bin = frontarea_counter_bin./total_counter_bin_ndays;
     frontline_ratio_bin = frontline_counter_bin./total_counter_bin_ndays;
     % write to NetCDF file
-    result_fn = [daily_path, '/concatenate_front_daily_binned_',num2str(bin_resolution),'degree_',num2str(iy),'.nc'];
-    delete(result_fn)
     % create variable with defined dimension
-    nccreate(result_fn,'lon','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','classic')
-    nccreate(result_fn,'lat','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','classic')
-    nccreate(result_fn,'mask','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','classic')
-    nccreate(result_fn,'total_counter_bin','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','classic')
-    nccreate(result_fn, 'datetime', 'Dimensions', {'nt' ndays}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontarea_counter_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontline_counter_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontarea_ratio_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontline_ratio_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'classic')
+    nccreate(result_fn,'lon','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
+    nccreate(result_fn,'lat','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
+    nccreate(result_fn,'mask','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
+    nccreate(result_fn,'total_counter_bin','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
+    nccreate(result_fn, 'datetime', 'Dimensions', {'nt' ndays}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontarea_counter_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontline_counter_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontarea_ratio_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontline_ratio_bin', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' ndays}, 'datatype', 'double', 'format', 'netcdf4_classic')
     % write variable into files
     ncwrite(result_fn, 'lon', lon_bin)
     ncwrite(result_fn, 'lat', lat_bin)

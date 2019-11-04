@@ -142,13 +142,13 @@ end
 % saving to NetCDF file
 result_fn = [clim_path,'front_frequency_map_binned_',num2str(bin_resolution),'degree_',num2str(yy1),'to',num2str(yy2),'.nc'];
 delete(result_fn)
-nccreate(result_fn,'lon','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','classic')
-nccreate(result_fn,'lat','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','classic')
-nccreate(result_fn,'mask','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','classic')
-nccreate(result_fn, 'counter_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'classic')
-nccreate(result_fn, 'frontarea_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'classic')
-nccreate(result_fn, 'frontline_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'classic')
-nccreate(result_fn, 'true_frontarea_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'classic')
+nccreate(result_fn,'lon','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
+nccreate(result_fn,'lat','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
+nccreate(result_fn,'mask','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
+nccreate(result_fn, 'counter_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+nccreate(result_fn, 'frontarea_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+nccreate(result_fn, 'frontline_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+nccreate(result_fn, 'true_frontarea_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
 
 % write variable into files
 ncwrite(result_fn, 'lon', lon_bin)

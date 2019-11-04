@@ -131,13 +131,13 @@ tt = toc;
 result_fn = [clim_path,'front_frequency_map_raw_',num2str(yy1),'to',num2str(yy2),'.nc'];
 delete(result_fn)
 % create variable with defined dimension
-nccreate(result_fn,'lon','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','classic')
-nccreate(result_fn,'lat','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','classic')
-nccreate(result_fn,'mask','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','classic')
-nccreate(result_fn, 'counter_map', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'classic')
-nccreate(result_fn, 'frontarea_freq_map', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'classic')
-nccreate(result_fn, 'frontline_freq_map', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'classic')
-nccreate(result_fn, 'true_frontarea_freq_map', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'classic')
+nccreate(result_fn,'lon','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','netcdf4_classic')
+nccreate(result_fn,'lat','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','netcdf4_classic')
+nccreate(result_fn,'mask','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','netcdf4_classic')
+nccreate(result_fn, 'counter_map', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+nccreate(result_fn, 'frontarea_freq_map', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+nccreate(result_fn, 'frontline_freq_map', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+nccreate(result_fn, 'true_frontarea_freq_map', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
 % write variable into files
 ncwrite(result_fn, 'lon', lon)
 ncwrite(result_fn, 'lat', lat)

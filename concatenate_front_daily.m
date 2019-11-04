@@ -3,7 +3,7 @@ close all
 clear all
 clc
 %
-platform = 'server197';
+platform = 'hanyh_laptop';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
     data_path = 'E:\DATA\Model\Mercator\Extraction_PSY4V3_SCS\';
@@ -62,7 +62,7 @@ thresh_in = [];
 % postprocess parameter
 logic_morph = 0;
 
-yy1 = 2007;
+yy1 = 2017;
 yy2 = 2017;
 
 daily_path = [basedir, './Result/', datatype, '/', domain_name, '/daily/'];
@@ -124,17 +124,17 @@ for iy = yy1:yy2
     end
     % write to NetCDF file
     % create variable with defined dimension
-    nccreate(result_fn,'lon','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','classic')
-    nccreate(result_fn,'lat','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','classic')
-    nccreate(result_fn,'mask','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','classic')
-    nccreate(result_fn, 'datetime', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'low_thresh_daily', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'high_thresh_daily', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'length_thresh_daily', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'front_num_daily', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'tgrad_daily', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'bw_line_daily', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'bw_area_daily', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'classic')
+    nccreate(result_fn,'lon','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','netcdf4_classic')
+    nccreate(result_fn,'lat','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','netcdf4_classic')
+    nccreate(result_fn,'mask','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','netcdf4_classic')
+    nccreate(result_fn, 'datetime', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'low_thresh_daily', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'high_thresh_daily', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'length_thresh_daily', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'front_num_daily', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'tgrad_daily', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'bw_line_daily', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'bw_area_daily', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
     % write variable into files
     ncwrite(result_fn, 'lon', lon)
     ncwrite(result_fn, 'lat', lat)
