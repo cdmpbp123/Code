@@ -51,7 +51,7 @@ switch domain
 end
 
 % preprocess parameter
-datatype = 'ostia';
+datatype = 'roms';
 fntype = 'daily';
 depth = 1;
 skip = 1;
@@ -63,8 +63,8 @@ thresh_in = [];
 % postprocess parameter
 logic_morph = 0;
 
-yy1 = 2018;
-yy2 = 2018;
+yy1 = 2008;
+yy2 = 2017;
 
 daily_path = [basedir, './Result/', datatype, '/', domain_name, '/daily/'];
 clim_path = [basedir, './Result/', datatype, '/', domain_name, '/climatology/'];mkdir(clim_path)
@@ -81,9 +81,10 @@ bin_resolution = 0.5; % unit: degree
 [lon_bin, lat_bin, mask_bin, mask_cell,~] = grid_to_bin(lon,lat,mask,bin_resolution,lon_w,lon_e,lat_s,lat_n);
 [nx_bin,ny_bin] = size(lon_bin);
 for iy = yy1:yy2
+    iy
     fn = [daily_path, '/concatenate_front_daily_',num2str(iy),'.nc'];
     result_fn = [daily_path, '/concatenate_front_daily_binned_',num2str(bin_resolution),'degree_',num2str(iy),'.nc'];
-    if -exist(fn) || exist(result_fn)
+    if ~exist(fn) || exist(result_fn)
         continue
     end
     datetime = ncread(fn,'datetime');

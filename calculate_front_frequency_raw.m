@@ -3,7 +3,7 @@ close all
 clear all
 clc
 %
-platform = 'hanyh_laptop';
+platform = 'server197';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
     data_path = 'E:\DATA\Model\Mercator\Extraction_PSY4V3_SCS\';
@@ -51,7 +51,7 @@ switch domain
 end
 
 % preprocess parameter
-datatype = 'mercator';
+datatype = 'ostia';
 fntype = 'daily';
 depth = 1;
 skip = 1;
@@ -63,8 +63,8 @@ thresh_in = [];
 % postprocess parameter
 logic_morph = 0;
 %
-yy1 = 2018;
-yy2 = 2018;
+yy1 = 2008;
+yy2 = 2017;
 
 daily_path = [basedir, './Result/', datatype, '/', domain_name, '/daily/'];
 clim_path = [basedir, './Result/', datatype, '/', domain_name, '/climatology/'];mkdir(clim_path)
@@ -96,6 +96,7 @@ mm_num = str2num(mm_str);
 for im = 1:12
     % get index for each day of month im
     mm_index = find(mm_num == im);
+    disp(num2str(im))
     
     for i = 1:nx
         for j = 1:ny

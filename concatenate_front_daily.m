@@ -3,7 +3,7 @@ close all
 clear all
 clc
 %
-platform = 'hanyh_laptop';
+platform = 'server197';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
     data_path = 'E:\DATA\Model\Mercator\Extraction_PSY4V3_SCS\';
@@ -62,7 +62,7 @@ thresh_in = [];
 % postprocess parameter
 logic_morph = 0;
 
-yy1 = 2017;
+yy1 = 2007;
 yy2 = 2017;
 
 daily_path = [basedir, './Result/', datatype, '/', domain_name, '/daily/'];

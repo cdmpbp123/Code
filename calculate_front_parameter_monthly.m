@@ -3,7 +3,7 @@ close all
 clear all
 clc
 %
-platform = 'hanyh_laptop';
+platform = 'server197';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
     % data_path = 'E:\DATA\Model\Mercator\Extraction_PSY4V3_SCS\';
@@ -49,7 +49,7 @@ switch domain
 end
 
 % preprocess parameter
-datatype = 'mercator';
+datatype = 'ostia';
 fntype = 'daily';
 depth = 1;
 skip = 1;
@@ -58,8 +58,8 @@ sigma = 2;
 N = 2;
 fill_value = 0;
 %
-yy1 = 2018;
-yy2 = 2018;
+yy1 = 2008;
+yy2 = 2017;
 %
 daily_path = [basedir, './Result/', datatype, '/', domain_name, '/daily/'];
 monthly_path = [basedir, './Result/', datatype, '/', domain_name, '/monthly/']; mkdir(monthly_path)
@@ -148,19 +148,19 @@ for iy = yy1:yy2
     end
 
     % create variable with defined dimension
-    nccreate(result_fn, 'lon', 'Dimensions', {'nx' nx 'ny' ny}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'lat', 'Dimensions', {'nx' nx 'ny' ny}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'mask', 'Dimensions', {'nx' nx 'ny' ny}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'temp_mean', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'tgrad_mean', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontNumber_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'dayOfMonth', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontLength_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontStrength_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontWidth_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontMaxWidth_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontEquivalentWidth_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
-    nccreate(result_fn, 'frontArea_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'classic')
+    nccreate(result_fn, 'lon', 'Dimensions', {'nx' nx 'ny' ny}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'lat', 'Dimensions', {'nx' nx 'ny' ny}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'mask', 'Dimensions', {'nx' nx 'ny' ny}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'temp_mean', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'tgrad_mean', 'Dimensions', {'nx' nx 'ny' ny 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontNumber_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'dayOfMonth', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontLength_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontStrength_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontWidth_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontMaxWidth_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontEquivalentWidth_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontArea_mean', 'Dimensions', {'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
     % write variable into files
     ncwrite(result_fn, 'lon', lon)
     ncwrite(result_fn, 'lat', lat)
