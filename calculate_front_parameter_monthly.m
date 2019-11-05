@@ -49,7 +49,7 @@ switch domain
 end
 
 % preprocess parameter
-datatype = 'ostia';
+datatype = 'roms';
 fntype = 'daily';
 depth = 1;
 skip = 1;

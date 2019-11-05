@@ -67,6 +67,7 @@ yy1 = 2008;
 yy2 = 2017;
 
 daily_path = [basedir, './Result/', datatype, '/', domain_name, '/daily/'];
+monthly_path = [basedir, './Result/', datatype, '/', domain_name, '/monthly/']; mkdir(monthly_path)
 clim_path = [basedir, './Result/', datatype, '/', domain_name, '/climatology/'];mkdir(clim_path)
 % input file
 fig_path = [basedir, './Fig/',datatype,'/', domain_name, '/climatology/']; mkdir(fig_path);
@@ -82,90 +83,86 @@ bin_resolution = 0.5; % unit: degree
 [lon_bin, lat_bin, mask_bin, mask_cell,~] = grid_to_bin(lon,lat,mask,bin_resolution,lon_w,lon_e,lat_s,lat_n);
 [nx_bin,ny_bin] = size(lon_bin);
 
-tgrad_daily = concatenate_front_multipe_years(daily_path, 'tgrad_daily',yy1,yy2);
-bw_line_daily = concatenate_front_multipe_years(daily_path, 'bw_line_daily',yy1,yy2);
-bw_area_daily = concatenate_front_multipe_years(daily_path, 'bw_area_daily',yy1,yy2);
-datetime_daily = concatenate_front_multipe_years(daily_path, 'datetime',yy1,yy2);
-low_thresh_daily = concatenate_front_multipe_years(daily_path, 'low_thresh_daily',yy1,yy2);
-high_thresh_daily = concatenate_front_multipe_years(daily_path, 'high_thresh_daily',yy1,yy2);
-length_thresh_daily = concatenate_front_multipe_years(daily_path, 'length_thresh_daily',yy1,yy2);
-%
-ndays = length(tgrad_daily);
+for iy = yy1:yy2
+    result_fn = [monthly_path,'front_frequency_map_binned_',num2str(bin_resolution),'degree_',num2str(iy),'.nc'];
+    daily_fn = [daily_path, '/concatenate_front_daily_',num2str(iy),'.nc'];
+    if exist(result_fn) || ~exist(daily_fn)
+        continue
+    end
+    datetime = ncread(daily_fn,'datetime');
+    bw_line_daily = ncread(daily_fn,'bw_line_daily');
+    bw_area_daily = ncread(daily_fn,'bw_area_daily');
 
-frontarea_freq_map = ones(nx_bin,ny_bin,nt)*NaN;
-frontline_freq_map = ones(nx_bin,ny_bin,nt)*NaN;
-true_frontarea_freq_map = ones(nx_bin,ny_bin,nt)*NaN;
-counter_map = zeros(nx_bin,ny_bin,nt);
+    frontarea_freq_map = ones(nx_bin,ny_bin,nt)*NaN;
+    frontline_freq_map = ones(nx_bin,ny_bin,nt)*NaN;
+    counter_map = zeros(nx_bin,ny_bin,nt);
 
-mm_str = datestr(datetime_daily,'mm');
-mm_num = str2num(mm_str);
-for im = 1:12
-    % get index for each day of month im
-    mm_index = find(mm_num == im);
-    % high_thresh = high_thresh_month(im);
-    
-    for ixb = 1:nx_bin
-        for iyb = 1:ny_bin
-            
-            if mask_bin(ixb,iyb) == 1
-                mask_tmp = mask_cell{ixb,iyb};
-                xx_ind = mask_tmp.xx;
-                yy_ind = mask_tmp.yy;
-                nonan_num = mask_tmp.nonan_num;
-                total_valid_counter = length(mm_index)*nonan_num;
-                counter_map(ixb,iyb,im) = total_valid_counter;
+    mm_str = datestr(datetime,'mm');
+    mm_num = str2num(mm_str);
+    for im = 1:12
+        disp([num2str(iy),'_',num2str(im)])
+        % get index for each day of month im
+        mm_index = find(mm_num == im);
+        % high_thresh = high_thresh_month(im);
+        
+        for ixb = 1:nx_bin
+            for iyb = 1:ny_bin
                 
-                % detected front area/line frequency
-                frontarea_counter_index  = find(bw_area_daily(xx_ind,yy_ind,mm_index) == 1);
-                frontarea_freq_map(ixb,iyb,im) = length(frontarea_counter_index) / total_valid_counter;
-                %
-                frontline_counter_index  = find(bw_line_daily(xx_ind,yy_ind,mm_index) == 1);
-                frontline_freq_map(ixb,iyb,im) = length(frontline_counter_index) / total_valid_counter;
+                if mask_bin(ixb,iyb) == 1
+                    mask_tmp = mask_cell{ixb,iyb};
+                    xx_ind = mask_tmp.xx;
+                    yy_ind = mask_tmp.yy;
+                    nonan_num = mask_tmp.nonan_num;
+                    total_valid_counter = length(mm_index)*nonan_num;
+                    counter_map(ixb,iyb,im) = total_valid_counter;
+                    
+                    % detected front area/line frequency
+                    frontarea_counter_index  = find(bw_area_daily(xx_ind,yy_ind,mm_index) == 1);
+                    frontarea_freq_map(ixb,iyb,im) = length(frontarea_counter_index) / total_valid_counter;
+                    %
+                    frontline_counter_index  = find(bw_line_daily(xx_ind,yy_ind,mm_index) == 1);
+                    frontline_freq_map(ixb,iyb,im) = length(frontline_counter_index) / total_valid_counter;
+                    
+                    % "true" front area/line frequency with assumption in function get_detect_validation_score.m
+                    % TBD: frontline is hard to deal
+                    % first to get true value of frontarea for comparison
+                    % thresh_local = high_thresh_daily(mm_index);
+                    % mean_thresh = nanmean(thresh_local(:));
+                    % true_frontarea_counter_index = find(tgrad_daily(xx_ind,yy_ind,mm_index) > mean_thresh);
+                    % true_frontarea_freq_map(ixb,iyb,im) = length(true_frontarea_counter_index) / total_valid_counter;
+                    
+                    clear mask_tmp  xx_ind yy_ind
+                    clear frontarea_counter_index frontline_counter_index total_valid_counter
+                end
                 
-                % "true" front area/line frequency with assumption in function get_detect_validation_score.m
-                % TBD: frontline is hard to deal
-                % first to get true value of frontarea for comparison
-                thresh_local = high_thresh_daily(mm_index);
-                mean_thresh = nanmean(thresh_local(:));
-                true_frontarea_counter_index = find(tgrad_daily(xx_ind,yy_ind,mm_index) > mean_thresh);
-                true_frontarea_freq_map(ixb,iyb,im) = length(true_frontarea_counter_index) / total_valid_counter;
-                
-                clear mask_tmp  xx_ind yy_ind
-                clear frontarea_counter_index frontline_counter_index total_valid_counter
             end
-            
         end
+
     end
 
+    % saving to NetCDF file
+    nccreate(result_fn,'lon','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
+    nccreate(result_fn,'lat','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
+    nccreate(result_fn,'mask','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
+    nccreate(result_fn, 'counter_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontarea_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+    nccreate(result_fn, 'frontline_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
+
+    % write variable into files
+    ncwrite(result_fn, 'lon', lon_bin)
+    ncwrite(result_fn, 'lat', lat_bin)
+    ncwrite(result_fn, 'mask', mask_bin)
+    ncwrite(result_fn, 'counter_map', counter_map)
+    ncwrite(result_fn, 'frontarea_freq_map', frontarea_freq_map)
+    ncwrite(result_fn, 'frontline_freq_map', frontline_freq_map)
+    % write file global attribute
+    ncwriteatt(result_fn, '/', 'creation_date', datestr(now))
+    % ncwriteatt(result_fn, '/', 'time_elapsed(s)', num2str(tt))
+    ncwriteatt(result_fn, '/', 'description', [datatype,' monthly front frequency map with binned grid in ',num2str(iy)])
+    ncwriteatt(result_fn, '/', 'domain', domain_name)
+    ncwriteatt(result_fn, '/', 'smooth_type', smooth_type)
+    ncwriteatt(result_fn, '/', 'bin_resolution:', num2str(bin_resolution))
 end
-
-% saving to NetCDF file
-result_fn = [clim_path,'front_frequency_map_binned_',num2str(bin_resolution),'degree_',num2str(yy1),'to',num2str(yy2),'.nc'];
-delete(result_fn)
-nccreate(result_fn,'lon','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
-nccreate(result_fn,'lat','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
-nccreate(result_fn,'mask','Dimensions' ,{'nx' nx_bin 'ny' ny_bin},'datatype','double','format','netcdf4_classic')
-nccreate(result_fn, 'counter_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
-nccreate(result_fn, 'frontarea_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
-nccreate(result_fn, 'frontline_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
-nccreate(result_fn, 'true_frontarea_freq_map', 'Dimensions', {'nx' nx_bin 'ny' ny_bin 'nt' nt}, 'datatype', 'double', 'format', 'netcdf4_classic')
-
-% write variable into files
-ncwrite(result_fn, 'lon', lon_bin)
-ncwrite(result_fn, 'lat', lat_bin)
-ncwrite(result_fn, 'mask', mask_bin)
-ncwrite(result_fn, 'counter_map', counter_map)
-ncwrite(result_fn, 'frontarea_freq_map', frontarea_freq_map)
-ncwrite(result_fn, 'frontline_freq_map', frontline_freq_map)
-ncwrite(result_fn, 'true_frontarea_freq_map', true_frontarea_freq_map)
-% write file global attribute
-ncwriteatt(result_fn, '/', 'creation_date', datestr(now))
-% ncwriteatt(result_fn, '/', 'time_elapsed(s)', num2str(tt))
-ncwriteatt(result_fn, '/', 'description', [datatype,' climatology front frequency map with binned grid'])
-ncwriteatt(result_fn, '/', 'domain', domain_name)
-ncwriteatt(result_fn, '/', 'smooth_type', smooth_type)
-ncwriteatt(result_fn, '/', 'average_time:', ['from ', num2str(yy1), ' to ', num2str(yy2)])
-
 
 
 
