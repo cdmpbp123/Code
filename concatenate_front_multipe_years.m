@@ -1,8 +1,8 @@
-function concat_var = concatenate_front_multipe_years(daily_path, varname,dimsize,yy1,yy2)
-% function only for this script
+function concat_var = concatenate_front_multipe_years(daily_path, fn_prefix, varname,dimsize,yy1,yy2)
+% function to concatenate data of mutiple years 
 concat_var = [];
 for yy = yy1:yy2
-    fn = [daily_path, '/concatenate_front_daily_',num2str(yy),'.nc'];
+    fn = [daily_path, '/',fn_prefix,num2str(yy),'.nc'];
     if ~exist(fn)
         continue
     end
