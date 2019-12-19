@@ -4,25 +4,20 @@ clear all
 clc
 %
 warning off
-platform = 'mercator_PC';
+platform = 'hanyh_laptop';
 
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
-    data_path = 'E:\DATA\Model\Mercator\Extraction_PSY4V3_SCS\';
+    data_path = 'E:\global-analysis-forecast-phy-001-024\';
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform, 'PC_office')
     basedir = 'D:\lomf\frontal_detect\';
-    data_path = 'E:\DATA\obs\OSTIA\';
+    data_path = 'E:\global-analysis-forecast-phy-001-024\';
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform, 'server197')
     root_path = '/work/person/rensh/';
     basedir = [root_path, '/front_detect/'];
-    data_path = [root_path, '/Data/OSTIA/'];
-    toolbox_path = [root_path, '/matlab_function/'];
-elseif strcmp(platform, 'mercator_PC')
-    root_path = '/homelocal/sauvegarde/sren/';
-    basedir = [root_path, '/front_detect/'];
-    data_path = [root_path, '/Mercator_data/Model/Extraction_PSY4V3_SCS/'];
+    % data_path = [root_path, '/Data/OSTIA/'];
     toolbox_path = [root_path, '/matlab_function/'];
 end
 
@@ -83,7 +78,7 @@ for iy = yy1:yy2
 
         for id = 1:31
             day_string = [num2str(iy), num2str(im, '%2.2d'), num2str(id, '%2.2d')]
-            filestruct = dir([data_path, '/ext-PSY4V3R1_1dAV_', day_string, '*gridT*.nc']);
+            filestruct = dir([data_path, '/mercatorpsy4v3r1_gl12_mean_', day_string, '*_ext_SCS.nc']);
             mat_fn = [year_mat_path, 'detected_front_', day_string, '.mat'];
             nc_fn = [year_netcdf_path,'detected_front_',day_string,'.nc'];
 
