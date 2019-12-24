@@ -6,21 +6,13 @@ clc
 platform = 'hanyh_laptop';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
-    data_path = 'E:\DATA\Model\Mercator\Extraction_PSY4V3_SCS\';
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform, 'PC_office')
     basedir = 'D:\lomf\frontal_detect\';
-    data_path = 'E:\DATA\obs\OSTIA\';
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform, 'server197')
     root_path = '/work/person/rensh/';
     basedir = [root_path, '/front_detect/'];
-    data_path = [root_path, '/Data/OSTIA/'];
-    toolbox_path = [root_path, '/matlab_function/'];
-elseif strcmp(platform, 'mercator_PC')
-    root_path = '/homelocal/sauvegarde/sren/';
-    basedir = [root_path, '/front_detect/'];
-    data_path = [root_path, '/Mercator_data/Model/Extraction_PSY4V3_SCS/'];
     toolbox_path = [root_path, '/matlab_function/'];
 end
 
@@ -53,11 +45,8 @@ switch domain
 end
 
 % preprocess parameter
-% datatype = 'mercator';
-datatype = 'roms';
+datatype = 'mercator';
 fntype = 'daily';
-
-
 yy1 = 2008;
 yy2 = 2017;
 % set a new regular grid
@@ -70,8 +59,7 @@ daily_path = [basedir, './Result/', datatype, '/', domain_name, '/daily/'];
 
 fig_path = [basedir, './Fig/',datatype,'/', domain_name, '/daily/']; mkdir(fig_path);
 fig_show = 'off';
-fig_score_yearly = 1;
-scores_fig_path = [fig_path,'/scores/'];mkdir(scores_fig_path)
+scores_fig_path = [fig_path,'/scores/']; mkdir(scores_fig_path)
 % set bin ratio threshold
 bin_area_ratio_thresh = 0.5;
 bin_line_ratio_thresh = 0.1;    % TBD: need to auto-change with grid size
@@ -92,14 +80,13 @@ for iy = yy1:yy2
     lon_bin = ncread(fn,'lon');
     lat_bin = ncread(fn,'lat');
     mask_bin = ncread(fn,'mask');
-    datetime = ncread(fn,'datetime');
     [nx_bin,ny_bin] = size(lon_bin);
     % read binned daily front variable
     ostia_area_ratio = ncread(ostia_fn,'frontarea_ratio_bin');
     area_ratio = ncread(fn,'frontarea_ratio_bin');
     
     ostia_datetime = ncread(ostia_fn,'datetime')-datenum(iy,1,1,0,0,0)+1;
-    datetime = ncread(fn,'datetime')-datenum(iy,1,1,0,0,0)+1;
+    model_datetime = floor(ncread(fn,'datetime'))-datenum(iy,1,1,0,0,0)+1;
     % initial scores timeseries
     area_bias = ones(ndays,1)*NaN;
     area_TS = ones(ndays,1)*NaN;
@@ -117,7 +104,7 @@ for iy = yy1:yy2
         area_ratio = ncread(fn,'frontarea_ratio_bin',[1 1 time_ind],[Inf Inf 1]);
         % ratio to binary
         ostia_area = ratio_to_binary(ostia_area_ratio,bin_area_ratio_thresh);
-        area = ratio_to_binary(area_ratio,bin_area_ratio_thresh);
+        model_area = ratio_to_binary(area_ratio,bin_area_ratio_thresh);
         %
         [area_bias(iday), area_TS(iday), area_FAR(iday), area_MR(iday), area_FA(iday), area_DR(iday)] = front_skill_score(area, ostia_area);
         clear area ostia_area
