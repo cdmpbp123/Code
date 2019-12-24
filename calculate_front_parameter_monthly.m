@@ -43,7 +43,7 @@ switch domain
 end
 
 % preprocess parameter
-datatype = 'roms';
+datatype = 'mercator';
 fntype = 'daily';
 depth = 1;
 skip = 1;

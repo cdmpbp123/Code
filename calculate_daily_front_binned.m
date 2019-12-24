@@ -6,21 +6,13 @@ clc
 platform = 'server197';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
-    data_path = 'E:\DATA\Model\Mercator\Extraction_PSY4V3_SCS\';
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform, 'PC_office')
     basedir = 'D:\lomf\frontal_detect\';
-    data_path = 'E:\DATA\obs\OSTIA\';
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform, 'server197')
     root_path = '/work/person/rensh/';
     basedir = [root_path, '/front_detect/'];
-    data_path = [root_path, '/Data/OSTIA/'];
-    toolbox_path = [root_path, '/matlab_function/'];
-elseif strcmp(platform, 'mercator_PC')
-    root_path = '/homelocal/sauvegarde/sren/';
-    basedir = [root_path, '/front_detect/'];
-    data_path = [root_path, '/Mercator_data/Model/Extraction_PSY4V3_SCS/'];
     toolbox_path = [root_path, '/matlab_function/'];
 end
 
@@ -51,17 +43,7 @@ switch domain
 end
 
 % preprocess parameter
-datatype = 'roms';
-fntype = 'daily';
-depth = 1;
-skip = 1;
-smooth_type = 'gaussian';
-sigma = 2;
-N = 2;
-fill_value = 0;
-thresh_in = [];
-% postprocess parameter
-logic_morph = 0;
+datatype = 'mercator';
 
 yy1 = 2008;
 yy2 = 2017;
@@ -125,7 +107,6 @@ for iy = yy1:yy2
     ncwriteatt(result_fn, '/', 'creation_date', datestr(now))
     ncwriteatt(result_fn, '/', 'description', [datatype,' concatenate front daily output in ',num2str(iy),'with bin grid'])
     ncwriteatt(result_fn, '/', 'domain', domain_name)
-    ncwriteatt(result_fn, '/', 'smooth_type', smooth_type)
 end
 
 

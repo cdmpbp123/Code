@@ -4,7 +4,7 @@ clear all
 clc
 %
 warning off
-platform = 'hanyh_laptop';
+platform = 'server197';
 
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
@@ -17,7 +17,7 @@ elseif strcmp(platform, 'PC_office')
 elseif strcmp(platform, 'server197')
     root_path = '/work/person/rensh/';
     basedir = [root_path, '/front_detect/'];
-    % data_path = [root_path, '/Data/OSTIA/'];
+    data_path = [root_path, '/Data/Mercator/global-analysis-forecast-phy-001-024/'];
     toolbox_path = [root_path, '/matlab_function/'];
 end
 
@@ -59,15 +59,14 @@ sigma = 2;
 N = 2;
 fill_value = 0;
 % detect parameter
-% flen_crit = 0;
 flen_crit = []; % auto-thresh for length
 thresh_in = [];
 % postprocess parameter
 logic_morph = 0;
 
 %
-yy1 = 2018;
-yy2 = 2018;
+yy1 = 2008;
+yy2 = 2017;
 
 for iy = yy1:yy2
     year_mat_path = [result_path, num2str(iy), '/mat/']; mkdir(year_mat_path)

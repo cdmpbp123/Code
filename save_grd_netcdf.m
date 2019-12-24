@@ -3,7 +3,7 @@ close all
 clear all
 clc
 %
-platform = 'hanyh_laptop';
+platform = 'server197';
 if strcmp(platform, 'hanyh_laptop')
     basedir = 'D:\lomf\frontal_detect\';
     toolbox_path = 'D:\matlab_function\';
