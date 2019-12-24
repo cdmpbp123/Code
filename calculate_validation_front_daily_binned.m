@@ -46,10 +46,8 @@ end
 
 % preprocess parameter
 datatype = 'mercator';
-fntype = 'daily';
 yy1 = 2008;
 yy2 = 2017;
-% set a new regular grid
 bin_resolution = 0.5; % unit: degree
 
 ostia_daily_path = [basedir, './Result/ostia/', domain_name, '/daily/'];
@@ -63,7 +61,6 @@ scores_fig_path = [fig_path,'/scores/']; mkdir(scores_fig_path)
 % set bin ratio threshold
 bin_area_ratio_thresh = 0.5;
 bin_line_ratio_thresh = 0.1;    % TBD: need to auto-change with grid size
-
 
 for iy = yy1:yy2
     ostia_fn = [ostia_daily_path, '/concatenate_front_daily_binned_',num2str(bin_resolution),'degree_',num2str(iy),'.nc'];
@@ -80,10 +77,11 @@ for iy = yy1:yy2
     lon_bin = ncread(fn,'lon');
     lat_bin = ncread(fn,'lat');
     mask_bin = ncread(fn,'mask');
+    datetime = ncread(fn,'datetime');
     [nx_bin,ny_bin] = size(lon_bin);
     % read binned daily front variable
     ostia_area_ratio = ncread(ostia_fn,'frontarea_ratio_bin');
-    area_ratio = ncread(fn,'frontarea_ratio_bin');
+    model_area_ratio = ncread(fn,'frontarea_ratio_bin');
     
     ostia_datetime = ncread(ostia_fn,'datetime')-datenum(iy,1,1,0,0,0)+1;
     model_datetime = floor(ncread(fn,'datetime'))-datenum(iy,1,1,0,0,0)+1;
@@ -96,18 +94,18 @@ for iy = yy1:yy2
     area_DR = ones(ndays,1)*NaN;
     for iday = 1:ndays
         ostia_time_ind = find(iday == ostia_datetime);
-        time_ind = find(iday == datetime);
-        if isempty(ostia_time_ind) || isempty(time_ind)
+        model_time_ind = find(iday == model_datetime);
+        if isempty(ostia_time_ind) || isempty(model_time_ind)
             continue
         end
         ostia_area_ratio = ncread(ostia_fn,'frontarea_ratio_bin',[1 1 ostia_time_ind],[Inf Inf 1]);
-        area_ratio = ncread(fn,'frontarea_ratio_bin',[1 1 time_ind],[Inf Inf 1]);
+        model_area_ratio = ncread(fn,'frontarea_ratio_bin',[1 1 model_time_ind],[Inf Inf 1]);
         % ratio to binary
         ostia_area = ratio_to_binary(ostia_area_ratio,bin_area_ratio_thresh);
-        model_area = ratio_to_binary(area_ratio,bin_area_ratio_thresh);
+        model_area = ratio_to_binary(model_area_ratio,bin_area_ratio_thresh);
         %
-        [area_bias(iday), area_TS(iday), area_FAR(iday), area_MR(iday), area_FA(iday), area_DR(iday)] = front_skill_score(area, ostia_area);
-        clear area ostia_area
+        [area_bias(iday), area_TS(iday), area_FAR(iday), area_MR(iday), area_FA(iday), area_DR(iday)] = front_skill_score(model_area, ostia_area);
+        clear model_area ostia_area
     end
 
     result_fn = [daily_path,'/validation_score_front_daily_binned_',num2str(bin_resolution),'degree_',num2str(iy),'.nc'];
