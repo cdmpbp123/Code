@@ -1,5 +1,5 @@
 % calculate daily SST rmse between ROMS and OSTIA from 2007-2017
-% interpolate ROMS data to OSTIA grid
+% interpolate ROMS and Mercator data to OSTIA grid
 % TBD: add mercator for intercomparison, all data need to interpolated to _ostia grid 
 close all
 clear all
@@ -173,7 +173,7 @@ save('sst_rmse_test_20191223.mat', ...
     'roms_rmse_mean', ...
     'mercator_rmse_mean', ...
     'total_days_monthly')
-result_fn = [result_path,'sst_rmse_climatology_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.nc'];
+result_fn = [result_path,roms_exp_name,'_sst_rmse_climatology_',smooth_type,'_',num2str(yy1),'to',num2str(yy2),'.nc'];
 % create variable with defined dimension
 nccreate(result_fn,'lon','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','classic')
 nccreate(result_fn,'lat','Dimensions' ,{'nx' nx 'ny' ny},'datatype','double','format','classic')

@@ -29,9 +29,6 @@ if [ "${time_type}" == "climatology" ]; then
   # front line frequency raw grid
   echo "convert climatology monthly frontline_freq_map "
   convert -delay 100 -loop 0 ${fig_path}/freq_raw/frontline_freq_map_month_*.png ${fig_path}/monthly_frontline_freq_map.gif
-  # # frequency bias
-  # convert -delay 100 -loop 0 ${fig_path}/freq_bin_0.5/bias_frontline_freq_map_month_*.png ${fig_path}/bias_frontline_freq_map_monthly.gif
-  # convert -delay 100 -loop 0 ${fig_path}/freq_bin_0.5/bias_frontarea_freq_map_month_*.png ${fig_path}/bias_frontarea_freq_map_monthly.gif
 elif [ "${time_type}" == "monthly" ]; then
   echo ${time_type}
   # # for monthly

@@ -48,7 +48,7 @@ switch domain
 end
 
 % % parameter
-datatype = 'mercator';
+datatype = 'ostia';
 % plot_type = 'monthly';
 plot_type = 'climatology';
 yy1 = 2008;

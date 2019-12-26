@@ -10,12 +10,10 @@ if strcmp(platform, 'hanyh_laptop')
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform, 'PC_office')
     basedir = 'D:\lomf\frontal_detect\';
-    data_path = 'E:\DATA\obs\OSTIA\';
     toolbox_path = 'D:\matlab_function\';
 elseif strcmp(platform, 'server197')
     root_path = '/work/person/rensh/';
     basedir = [root_path, '/front_detect/'];
-    data_path = [root_path, '/Data/OSTIA/'];
     toolbox_path = [root_path, '/matlab_function/'];
 end
 
@@ -99,7 +97,6 @@ end
 month_string = {'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'};
 xx = cellstr(month_string);
 xlabel = 1:12;
-
 
 figure
 plot(xlabel,area_rmse1,'-b','LineWidth',2)
