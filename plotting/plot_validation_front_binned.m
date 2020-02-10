@@ -196,8 +196,6 @@ set(gca,'XTickLabel',xx)
 export_fig([scores_fig_path,'validation_scores_monthly_climatology_',num2str(im,'%2.2d'),'.png'],'-png','-r200');
 close all
 
-
-% plotregression(xx,monthly_normalized(area_bias_month)*length(xx))
 function [normalized_var] = monthly_normalized(var)
     len = length(var);
     minvar = nanmin(var);

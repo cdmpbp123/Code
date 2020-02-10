@@ -44,7 +44,6 @@ switch domain
         lon_w = 99; lon_e = 144;
 end
 
-% preprocess parameter
 datatype = 'mercator';
 yy1 = 2008;
 yy2 = 2017;
@@ -57,7 +56,7 @@ daily_path = [basedir, './Result/', datatype, '/', domain_name, '/daily/'];
 
 fig_path = [basedir, './Fig/',datatype,'/', domain_name, '/daily/']; mkdir(fig_path);
 fig_show = 'off';
-scores_fig_path = [fig_path,'/scores/']; mkdir(scores_fig_path)
+% scores_fig_path = [fig_path,'/scores/']; mkdir(scores_fig_path)
 % set bin ratio threshold
 bin_area_ratio_thresh = 0.5;
 bin_line_ratio_thresh = 0.1;    % TBD: need to auto-change with grid size

@@ -1,14 +1,19 @@
 % filter parameter test for ROMS daily data
-clc; clear; 
+clc; 
+clear all;
 close all;
 warning off
 opengl software
-addpath(genpath('D:\lomf\frontal_detect\frontal_detection\'))
-addpath(genpath('D:\matlab_function\m_map\'))
-addpath(genpath('D:\matlab_function\export_fig\'))
-addpath(genpath('D:\matlab_function\MatlabFns\'))
-%
-basedir=pwd;
+platform = 'hanyh_laptop';
+basedir = 'D:\lomf\frontal_detect\';
+toolbox_path = 'D:\matlab_function\';
+
+% add path of toolbox we use
+addpath(genpath([toolbox_path, '/export_fig/']))
+addpath(genpath([toolbox_path, '/m_map/']))
+addpath(genpath([toolbox_path, '/MatlabFns/']))
+addpath(genpath([basedir, '/frontal_detection/']))
+
 global fntype depth datatype date_str
 global fig_path result_path
 global fill_value flen_crit thresh_in logic_morph
@@ -37,8 +42,7 @@ sigma = 2;
 N = 2;
 fill_value = 0;
 % detect parameter
-% flen_crit=100e3;
- flen_crit=0e3;  % close flen_crit 
+flen_crit=0e3;  % close flen_crit 
 
 thresh_in = [];
 % postprocess parameter
@@ -107,9 +111,9 @@ global lon_w lon_e lat_s lat_n
 low_thresh = thresh_out(1);
 high_thresh = thresh_out(2);
 % figure setup
-fig_sst_frontline = 1;
-fig_tgrad_frontarea = 1;
-fig_sst_contour = 1;
+fig_sst_frontline = 0;
+fig_tgrad_frontarea = 0;
+fig_sst_contour = 0;
 line_width = 1;
 lon = grd.lon_rho;
 lat = grd.lat_rho;

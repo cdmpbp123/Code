@@ -3,11 +3,24 @@ clc
 clear all
 close all
 warning off
-addpath(genpath('D:\lomf\frontal_detect\frontal_detection\'))
-addpath(genpath('D:\matlab_function\export_fig\'))
-%test for linesegment toolbox
-addpath(genpath('D:\matlab_function\MatlabFns\'))
-basedir=pwd;
+platform = 'hanyh_laptop';
+if strcmp(platform, 'hanyh_laptop')
+    basedir = 'D:\lomf\frontal_detect\';
+    toolbox_path = 'D:\matlab_function\';
+elseif strcmp(platform, 'PC_office')
+    basedir = 'D:\lomf\frontal_detect\';
+    toolbox_path = 'D:\matlab_function\';
+elseif strcmp(platform, 'server197')
+    root_path = '/work/person/rensh/';
+    basedir = [root_path, '/front_detect/'];
+    toolbox_path = [root_path, '/matlab_function/'];
+end
+
+% add path of toolbox we use
+addpath(genpath([toolbox_path, '/export_fig/']))
+addpath(genpath([toolbox_path, '/m_map/']))
+addpath(genpath([toolbox_path, '/MatlabFns/']))
+addpath(genpath([basedir, '/frontal_detection/']))
 %data setup
 lat_s=10; lat_n=25;
 lon_w=105; lon_e=121;
