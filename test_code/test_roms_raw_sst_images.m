@@ -49,6 +49,9 @@ lon = grd.lon_rho;
 lat = grd.lat_rho;
 mask = grd.mask_rho;
 
+X0 = lon_w + 0.05 * (lon_e - lon_w);
+Y0 = lat_s + 0.9 * (lat_n - lat_s);
+
 [temp_zl] = variable_preprocess(temp,smooth_type,fill_value);
 [tgrad, tangle] = get_front_variable(temp_zl,grd);
 % mask land with grd.mask_rho
@@ -60,14 +63,15 @@ P=m_pcolor(lon,lat,temp_zl);
 set(P,'LineStyle','none');
 shading interp
 hold on
-% caxis([15 32])
+caxis([16 28])
 colorbar
 colormap(jet);
 m_gshhs_i('patch', [.8 .8 .8], 'edgecolor', 'none');
-m_grid('box','fancy','tickdir','in','linest','none','ytick',0:2:40,'xtick',90:2:140);
-title(['raw sst image'])
+m_grid('box','fancy','tickdir','in','linest','none','ytick',0:5:40,'xtick',90:5:140);
+% title(['raw sst image'])
 % m_text(lon_w+1,lat_n-1,dtime_str)
-export_fig([fig_path,'sst_raw_image'],'-png','-r200');
+m_text(X0, Y0, '(a) SCSOFS', 'FontSize', 14)
+export_fig([fig_path,'sst_raw_image'],'-png','-r300');
 
 % SST gradient
 figure('visible','on')
@@ -80,10 +84,11 @@ caxis([0 0.1])
 colorbar
 colormap(jet);
 m_gshhs_i('patch', [.8 .8 .8], 'edgecolor', 'none');
-m_grid('box','fancy','tickdir','in','linest','none','ytick',0:2:40,'xtick',90:2:140);
-title(['raw SST gradient image'])
+m_grid('box','fancy','tickdir','in','linest','none','ytick',0:5:40,'xtick',90:5:140);
+% title(['raw SST gradient image'])
 % m_text(lon_w+1,lat_n-1,dtime_str)
-export_fig([fig_path,'sst_grad_raw_image'],'-eps','-r300');
+m_text(X0, Y0, '(b) SCSOFS', 'FontSize', 14)
+export_fig([fig_path,'sst_grad_raw_image'],'-png','-r300');
 
 
 

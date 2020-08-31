@@ -62,6 +62,9 @@ temp = temp_zl;
 lon = grd.lon_rho;
 lat = grd.lat_rho;
 
+% test 2020/02/17
+[temp_zl] = variable_preprocess(temp,smooth_type,fill_value,1,2);  
+
 % filter parmater experiment list:
 % exp_name  smooth_type   parameter   front_pixel_number   continuity_index   mean_frontline_length
 %   exp0    no_smooth       --       
